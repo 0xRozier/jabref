@@ -306,8 +306,15 @@ public class JabRefFrame extends BorderPane implements LibraryTabContainer, UiMe
 
     public void updateHorizontalDividerPosition() {
         if (mainStage.isShowing() && !sidePane.getChildren().isEmpty()) {
-            horizontalSplit.setDividerPositions(preferences.getGuiPreferences()
-                                                           .getHorizontalDividerPosition() / horizontalSplit.getWidth());
+            double savedPosition = preferences.getGuiPreferences().getHorizontalDividerPosition();
+            if (Double.isNaN(savedPosition) || savedPosition <= 0 || savedPosition >= 1) {
+                savedPosition = CoreGuiPreferences.getDefault().getHorizontalDividerPosition();
+            }
+            horizontalSplit.setDividerPositions(savedPosition);
+
+            if (horizontalDividerSubscription != null) {
+                horizontalDividerSubscription.unsubscribe();
+            }
             horizontalDividerSubscription = EasyBind.valueAt(horizontalSplit.getDividers(), 0)
                                                     .mapObservable(SplitPane.Divider::positionProperty)
                                                     .listenToValues((_, newValue) ->
