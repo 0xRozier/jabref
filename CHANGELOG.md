@@ -138,6 +138,7 @@ Note that this project **does not** adhere to [Semantic Versioning](https://semv
 - `--help` works now at JabSrv. [#15085](https://github.com/JabRef/jabref/pull/15085)
 - Fixed UI overlap in Citation Relations tab when entry titles are very long. [#15047](https://github.com/JabRef/jabref/issues/15047)
 - Fixed capitalization errors in the Automatic Field Editor. [#15068](https://github.com/JabRef/jabref/issues/15068)
+- We fixed the merge dialog overwriting the citation key chosen by the user during duplicate import. [#8644](https://github.com/JabRef/jabref/issues/8644)
 
 ### Removed
 
