@@ -364,10 +364,8 @@ public class ImportHandler {
         switch (decisionResult.decision()) {
             case KEEP_RIGHT:
                 targetBibDatabaseContext.getDatabase().removeEntry(duplicateEntry);
-                generatedKey.ifPresent(key -> originalEntry.setCitationKey(key));
                 break;
             case KEEP_BOTH:
-                generatedKey.ifPresent(key -> originalEntry.setCitationKey(key));
                 break;
             case KEEP_MERGE:
                 targetBibDatabaseContext.getDatabase().removeEntry(duplicateEntry);
