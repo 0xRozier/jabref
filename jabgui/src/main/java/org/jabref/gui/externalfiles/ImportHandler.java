@@ -241,8 +241,21 @@ public class ImportHandler {
     }
 
     public void importCleanedEntries(@Nullable TransferInformation transferInformation, List<BibEntry> entries) {
+        importCleanedEntries(transferInformation, entries, false);
+    }
+
+    /// Imports cleaned entries into the database.
+    ///
+    /// @param transferInformation optional transfer information for adjusting linked files
+    /// @param entries             the entries to import
+    /// @param skipKeyGeneration   if true, skip citation key generation (e.g., when the key was already generated
+    ///                            before the merge dialog so the user could choose/edit it)
+
+    private void importCleanedEntries(@Nullable TransferInformation transferInformation, List<BibEntry> entries, boolean skipKeyGeneration) {
         targetBibDatabaseContext.getDatabase().insertEntries(entries);
-        generateKeys(entries);
+        if (!skipKeyGeneration) {   
+            generateKeys(entries);
+        }
         setAutomaticFields(entries);
         addToGroups(entries, stateManager.getSelectedGroups(targetBibDatabaseContext));
         addToImportEntriesGroup(entries);
@@ -269,6 +282,7 @@ public class ImportHandler {
     /// @param entry    the entry to import (original will not be modified)
     /// @param decision the duplicate resolution strategy to apply
     /// @param tracker  tracks the import status of the entry
+    
     private void importEntryWithDuplicateCheck(@Nullable TransferInformation transferInformation, BibEntry entry, DuplicateResolverDialog.DuplicateResolverResult decision, EntryImportHandlerTracker tracker) {
         // The original entry should not be modified
         BibEntry entryCopy = new BibEntry(entry);
@@ -286,7 +300,7 @@ public class ImportHandler {
                           
                           BibEntry finalEntry = entryToInsert;
                           if (existingDuplicateInLibrary.isPresent()) {
-                               Optional<BibEntry> duplicateHandledEntry = handleDuplicates(entryToInsert, existingDuplicateInLibrary.get(), decision, generatedKey);
+                              Optional<BibEntry> duplicateHandledEntry = handleDuplicates(entryToInsert, existingDuplicateInLibrary.get(), decision, generatedKey);
                               if (duplicateHandledEntry.isEmpty()) {
                                   tracker.markSkipped();
                                   return;
@@ -444,7 +458,8 @@ public class ImportHandler {
             return Optional.empty();
         }
         CitationKeyGenerator keyGenerator = new CitationKeyGenerator(
-            targetBibDatabaseContext.getMetaData().getCiteKeyPatterns(preferences.getCitationKeyPatternPreferences().getKeyPatterns()),
+            targetBibDatabaseContext.getMetaData().getCiteKeyPatterns(preferences.getCitationKeyPatternPreferences()
+                                                                                 .getKeyPatterns()),
             targetBibDatabaseContext.getDatabase(),
             preferences.getCitationKeyPatternPreferences());
         return Optional.of(keyGenerator.generateKey(entry));
