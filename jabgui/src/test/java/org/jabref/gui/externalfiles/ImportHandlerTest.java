@@ -27,8 +27,8 @@ import org.jabref.model.database.BibDatabaseContext;
 import org.jabref.model.database.BibDatabaseMode;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.model.entry.field.StandardField;
-import org.jabref.model.metadata.MetaData;
 import org.jabref.model.entry.types.StandardEntryType;
+import org.jabref.model.metadata.MetaData;
 import org.jabref.model.util.DummyFileUpdateMonitor;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -271,20 +271,20 @@ class ImportHandlerTest {
 
         // Existing entry in the database
         BibEntry existingEntry = new BibEntry(StandardEntryType.Article)
-            .withCitationKey("ExistingKey")
-            .withField(StandardField.AUTHOR, "Smith")
-            .withField(StandardField.YEAR, "2022")
-            .withField(StandardField.TITLE, "Some Title")
+                .withCitationKey("ExistingKey")
+                .withField(StandardField.AUTHOR, "Smith")
+                .withField(StandardField.YEAR, "2022")
+                .withField(StandardField.TITLE, "Some Title");
         BibDatabase bibDatabase = bibDatabaseContext.getDatabase();
         bibDatabase.insertEntry(existingEntry);
 
         // User-chosen merged entry with a custom citation key
         String userChosenKey = "MyCustomKey";
         BibEntry mergedEntry = new BibEntry(StandardEntryType.Article)
-            .withCitationKey(userChosenKey)
-            .withField(StandardField.AUTHOR, "Smith")
-            .withField(StandardField.YEAR, "2022")
-            .withField(StandardField.TITLE, "Some Title");
+                .withCitationKey(userChosenKey)
+                .withField(StandardField.AUTHOR, "Smith")
+                .withField(StandardField.YEAR, "2022")
+                .withField(StandardField.TITLE, "Some Title");
         // Mock findDuplicate to return the existing entry as a duplicate
         Mockito.doReturn(Optional.of(existingEntry)).when(importHandler).findDuplicate(any());
 
@@ -293,9 +293,9 @@ class ImportHandlerTest {
     
         // Entry to import
         BibEntry importEntry = new BibEntry(StandardEntryType.Article)
-            .withField(StandardField.AUTHOR, "Smith")
-            .withField(StandardField.YEAR, "2022")
-            .withField(StandardField.TITLE, "Some Title");
+                .withField(StandardField.AUTHOR, "Smith")
+                .withField(StandardField.YEAR, "2022")
+                .withField(StandardField.TITLE, "Some Title");
         // Act
         importHandler.importEntriesWithDuplicateCheck(null, List.of(importEntry));
     
