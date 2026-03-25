@@ -226,7 +226,7 @@ class ImportHandlerTest {
         assertFalse(bibDatabase.getEntries().contains(duplicateEntry)); // Assert that the duplicate entry was removed from the database
         assertEquals(mergedEntry, result); // Assert that the merged entry is returned
     }
-    
+
     @Test
     void importWithDuplicateCheckPreservesMergedCitationKey() {
         // Arrange: set up key generation with pattern [auth][year]
