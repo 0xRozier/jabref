@@ -438,7 +438,7 @@ public class ImportHandler {
         }
         CitationKeyGenerator keyGenerator = new CitationKeyGenerator(
             targetBibDatabaseContext.getMetaData().getCiteKeyPatterns(preferences.getCitationKeyPatternPreferences()
-                                                                      .getKeyPatterns()),
+                                                                                 .getKeyPatterns()),
             targetBibDatabaseContext.getDatabase(),
             preferences.getCitationKeyPatternPreferences());
         return Optional.of(keyGenerator.generateKey(entry));
