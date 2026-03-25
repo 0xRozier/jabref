@@ -150,7 +150,7 @@ class ImportHandlerTest {
                 mock(DialogService.class),
                 new CurrentThreadTaskExecutor()));
         // Mock the behavior of getDuplicateDecision to return KEEP_RIGHT
-        Mockito.doReturn(decisionResult).when(importHandler).getDuplicateDecision(testEntry, duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult.BREAK);
+        Mockito.doReturn(decisionResult).when(importHandler).getDuplicateDecision(any(), any(), any(), any());
 
         // Act
         BibEntry result = importHandler.handleDuplicates(testEntry, duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult.BREAK).get();
@@ -181,7 +181,7 @@ class ImportHandlerTest {
                 mock(DialogService.class),
                 new CurrentThreadTaskExecutor()));
         // Mock the behavior of getDuplicateDecision to return KEEP_BOTH
-        Mockito.doReturn(decisionResult).when(importHandler).getDuplicateDecision(testEntry, duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult.BREAK);
+        Mockito.doReturn(decisionResult).when(importHandler).getDuplicateDecision(any(), any(), any(), any());
 
         // Act
         BibEntry result = importHandler.handleDuplicates(testEntry, duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult.BREAK).get();
@@ -215,7 +215,7 @@ class ImportHandlerTest {
                 mock(DialogService.class),
                 new CurrentThreadTaskExecutor()));
         // Mock the behavior of getDuplicateDecision to return KEEP_MERGE
-        Mockito.doReturn(decisionResult).when(importHandler).getDuplicateDecision(testEntry, duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult.BREAK);
+        Mockito.doReturn(decisionResult).when(importHandler).getDuplicateDecision(any(), any(), any(), any());
 
         // Act
         // create and return a default BibEntry or do other computations
@@ -245,7 +245,7 @@ class ImportHandlerTest {
         MetaData metaData = mock(MetaData.class);
         when(metaData.getCiteKeyPatterns(any())).thenReturn(patterns);
         when(bibDatabaseContext.getMetaData()).thenReturn(metaData);
-    
+
         StateManager stateManager = mock(StateManager.class);
         when(stateManager.getSelectedGroups(any())).thenReturn(FXCollections.observableArrayList());
 
@@ -261,13 +261,13 @@ class ImportHandlerTest {
         when(preferences.getFilePreferences()).thenReturn(filePreferences);
 
         importHandler = Mockito.spy(new ImportHandler(
-            bibDatabaseContext,
-            preferences,
-            new DummyFileUpdateMonitor(),
-            mock(UndoManager.class),
-            stateManager,
-            mock(DialogService.class),
-            new CurrentThreadTaskExecutor()));
+                bibDatabaseContext,
+                preferences,
+                new DummyFileUpdateMonitor(),
+                mock(UndoManager.class),
+                stateManager,
+                mock(DialogService.class),
+                new CurrentThreadTaskExecutor()));
 
         // Existing entry in the database
         BibEntry existingEntry = new BibEntry(StandardEntryType.Article)
@@ -290,7 +290,7 @@ class ImportHandlerTest {
 
         // Mock handleDuplicates(4 params) to simulate user choosing KEEP_MERGE with their custom key
         Mockito.doReturn(Optional.of(mergedEntry)).when(importHandler).handleDuplicates(any(), any(), any(), any());
-    
+
         // Entry to import
         BibEntry importEntry = new BibEntry(StandardEntryType.Article)
                 .withField(StandardField.AUTHOR, "Smith")
@@ -298,9 +298,9 @@ class ImportHandlerTest {
                 .withField(StandardField.TITLE, "Some Title");
         // Act
         importHandler.importEntriesWithDuplicateCheck(null, List.of(importEntry));
-    
+
         // Assert: the user's chosen citation key from the merge dialog must be preserved
-         assertEquals(userChosenKey, mergedEntry.getCitationKey().orElse(""),
-                      "The citation key chosen by the user in the merge dialog should not be overwritten by key generation");
+        assertEquals(userChosenKey, mergedEntry.getCitationKey().orElse(""),
+                "The citation key chosen by the user in the merge dialog should not be overwritten by key generation");
     }
 }
