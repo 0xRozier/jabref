@@ -300,9 +300,7 @@ class ImportHandlerTest {
         importHandler.importEntriesWithDuplicateCheck(null, List.of(importEntry));
     
         // Assert: the user's chosen citation key from the merge dialog must be preserved
-        boolean keyPreserved = bibDatabase.getEntries().stream()
-            .anyMatch(e -> userChosenKey.equals(e.getCitationKey().orElse(null)));
-        assertTrue(keyPreserved,
-                   "The citation key chosen by the user in the merge dialog should not be overwritten by key generation");
+         assertEquals(userChosenKey, mergedEntry.getCitationKey().orElse(""),
+                      "The citation key chosen by the user in the merge dialog should not be overwritten by key generation");
     }
 }
