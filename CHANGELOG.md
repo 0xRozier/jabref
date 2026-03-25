@@ -68,7 +68,6 @@ Note that this project **does not** adhere to [Semantic Versioning](https://semv
 - We improved CSL support with JabRef LibreOffice converter extension. [#14387](https://github.com/JabRef/jabref/issues/14387)
 - We fixed the merge dialog overwriting the citation key chosen by the user during duplicate import. [#8644](https://github.com/JabRef/jabref/issues/8644)
 
-
 ### Removed
 
 ## [6.0-alpha.5] – 2026-02-20
