@@ -278,6 +278,7 @@ public class ImportHandler {
     /// Imports an entry into the database with duplicate checking and handling.
     /// Creates a copy of the entry for processing - the original entry parameter is not modified.
     /// The copied entry may be modified during cleanup and duplicate handling.
+    ///
     /// @param entry    the entry to import (original will not be modified)
     /// @param decision the duplicate resolution strategy to apply
     /// @param tracker  tracks the import status of the entry
@@ -329,34 +330,11 @@ public class ImportHandler {
     }
 
     public Optional<BibEntry> handleDuplicates(BibEntry originalEntry, BibEntry duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult decision) {
-        DuplicateDecisionResult decisionResult = getDuplicateDecision(originalEntry, duplicateEntry, decision);
-        switch (decisionResult.decision()) {
-            case KEEP_RIGHT:
-                targetBibDatabaseContext.getDatabase().removeEntry(duplicateEntry);
-                break;
-            case KEEP_BOTH:
-                break;
-            case KEEP_MERGE:
-                targetBibDatabaseContext.getDatabase().removeEntry(duplicateEntry);
-                return Optional.of(decisionResult.mergedEntry());
-            case KEEP_LEFT:
-            case AUTOREMOVE_EXACT:
-            case BREAK:
-            default:
-                return Optional.empty();
-        }
-        return Optional.of(originalEntry);
+        return handleDuplicates(originalEntry, duplicateEntry, decision, Optional.empty());
     }
 
     public DuplicateDecisionResult getDuplicateDecision(BibEntry originalEntry, BibEntry duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult decision) {
-        DuplicateResolverDialog dialog = new DuplicateResolverDialog(duplicateEntry, originalEntry, DuplicateResolverDialog.DuplicateResolverType.IMPORT_CHECK, stateManager, dialogService, preferences);
-        if (decision == BREAK) {
-            decision = dialogService.showCustomDialogAndWait(dialog).orElse(BREAK);
-        }
-        if (preferences.getMergeDialogPreferences().shouldMergeApplyToAllEntries()) {
-            preferences.getMergeDialogPreferences().setAllEntriesDuplicateResolverDecision(decision);
-        }
-        return new DuplicateDecisionResult(decision, dialog.getMergedEntry());
+        return getDuplicateDecision(originalEntry, duplicateEntry, decision, Optional.empty());
     }
     
     public Optional<BibEntry> handleDuplicates(BibEntry originalEntry, BibEntry duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult decision, Optional<String> generatedKey) {
