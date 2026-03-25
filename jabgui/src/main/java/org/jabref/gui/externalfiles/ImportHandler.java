@@ -296,7 +296,7 @@ public class ImportHandler {
                           // Generate citation key string WITHOUT modifying the entry,
                           // so the "From import" column shows the original key
                           Optional<String> generatedKey = generateKeyString(entryToInsert);
-                          
+
                           BibEntry finalEntry = entryToInsert;
                           if (existingDuplicateInLibrary.isPresent()) {
                               Optional<BibEntry> duplicateHandledEntry = handleDuplicates(entryToInsert, existingDuplicateInLibrary.get(), decision, generatedKey);
@@ -336,7 +336,7 @@ public class ImportHandler {
     public DuplicateDecisionResult getDuplicateDecision(BibEntry originalEntry, BibEntry duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult decision) {
         return getDuplicateDecision(originalEntry, duplicateEntry, decision, Optional.empty());
     }
-    
+
     public Optional<BibEntry> handleDuplicates(BibEntry originalEntry, BibEntry duplicateEntry, DuplicateResolverDialog.DuplicateResolverResult decision, Optional<String> generatedKey) {
         DuplicateDecisionResult decisionResult = getDuplicateDecision(originalEntry, duplicateEntry, decision, generatedKey);
         switch (decisionResult.decision()) {
@@ -437,10 +437,10 @@ public class ImportHandler {
             return Optional.empty();
         }
         CitationKeyGenerator keyGenerator = new CitationKeyGenerator(
-            targetBibDatabaseContext.getMetaData().getCiteKeyPatterns(preferences.getCitationKeyPatternPreferences()
-                                                                                 .getKeyPatterns()),
-            targetBibDatabaseContext.getDatabase(),
-            preferences.getCitationKeyPatternPreferences());
+                targetBibDatabaseContext.getMetaData().getCiteKeyPatterns(preferences.getCitationKeyPatternPreferences()
+                                                                                     .getKeyPatterns()),
+                targetBibDatabaseContext.getDatabase(),
+                preferences.getCitationKeyPatternPreferences());
         return Optional.of(keyGenerator.generateKey(entry));
     }
 
