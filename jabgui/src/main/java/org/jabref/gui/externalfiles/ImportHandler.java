@@ -248,8 +248,7 @@ public class ImportHandler {
     ///
     /// @param transferInformation optional transfer information for adjusting linked files
     /// @param entries             the entries to import
-    /// @param skipKeyGeneration   if true, skip citation key generation (e.g., when the key was already generated
-    ///                                                                                  before the merge dialog so the user could choose/edit it)
+    /// @param skipKeyGeneration   if true, skip citation key generation (e.g., when the key was already generated before the merge dialog so the user could choose/edit it)
 
     private void importCleanedEntries(@Nullable TransferInformation transferInformation, List<BibEntry> entries, boolean skipKeyGeneration) {
         targetBibDatabaseContext.getDatabase().insertEntries(entries);
